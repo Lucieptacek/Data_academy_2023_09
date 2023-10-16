@@ -150,3 +150,7 @@ FROM czechia_payroll ;
 
 SELECT *
 FROM healthcare_provider ;
+
+SELECT
+
+
