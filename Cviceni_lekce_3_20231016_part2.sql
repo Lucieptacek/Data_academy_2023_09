@@ -156,3 +156,48 @@ FROM healthcare_provider ;
 
 SELECT *
 FROM czechia_region ;
+
+SELECT 
+	min(value),
+	max(value),+
+	category_code,
+	CASE
+		WHEN max(value)-min(value) <= 10 THEN 'rozdíl do 10 Kč'
+		WHEN max(value)-min(value) <= 40 THEN 'rozdíl do 40 Kč'
+		ELSE 'rozdíl nad 40 Kč'
+			END AS DIFFERENCE
+FROM czechia_price 
+GROUP BY category_code 
+ORDER BY DIFFERENCE;
+
+SELECT *
+FROM czechia_price_category ;
+
+SELECT *
+FROM czechia_price;
+
+SELECT 
+	min(value) as 'historicke minimum',
+	max(value) as 'historicke_maximum',
+	category_code,
+	round(avg(value), 2) as 'aritmeticky_prumer',
+	region_code 
+FROM czechia_price 
+GROUP BY category_code,
+		region_code 
+order by round(avg(value), 2) desc ;
+ 
+
+select *
+from demographics ;
+
+select *
+from countries  ;
+
+
+select 
+	distinct continent,
+	sum(population) 
+from countries 
+group by continent
+order by sum(population) desc;
