@@ -312,5 +312,30 @@ FROM countries;
 
 
 
+/*Zkouška projektu*/
+SELECT *
+FROM czechia_price ;
+
+SELECT *
+FROM czechia_payroll ;
+
+SELECT *
+FROM czechia_price
+ORDER BY date_from;
+
+SELECT *
+FROM czechia_payroll 
+ORDER BY payroll_year;
+
+
+SELECT
+    YEAR(date_from) AS 'Year from',
+    YEAR(date_to) AS 'Year to',
+    QUARTER(date_from) AS 'Quarter from',
+    QUARTER(date_to) AS 'Quarter to'
+FROM czechia_price 
+ORDER BY YEAR (date_from) , quarter(date_from)  ;
+
+
 
 
