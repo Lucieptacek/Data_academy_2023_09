@@ -201,3 +201,116 @@ select
 from countries 
 group by continent
 order by sum(population) desc;
+
+select 
+	round(AVG(surface_area)),
+	continent 
+from countries 
+group by continent
+order by round(AVG(surface_area)) desc ;
+
+select continent , round( avg(surface_area) )
+from countries c 
+group by continent 
+order by avg(surface_area) desc;
+
+
+
+
+select 
+	religion ,
+	count(*)
+from countries
+group BY religion  desc
+order by count(*) ;
+
+/* Úkol 2.1:
+ * Zjistěte celkovou populaci, průměrnou populaci a počet států pro každý kontinent
+ */
+select 
+	continent ,
+	round( sum(population)),
+	round( avg(population)),
+	count(country) 
+from countries 
+where continent is not null 
+group by continent 
+order by round(sum(population)) desc ;
+
+
+select continent , sum(population), round( avg(population) ), count(*)
+from countries
+where continent is not null
+group by continent
+order by sum(population) desc ;
+
+/*Úkol 2.2:
+ * Zjistěte celkovou rozlohu kontinentu a průměrnou rozlohu států ležících na daném kontinentu
+*/
+
+select *
+from countries  ;
+
+SELECT 
+	continent,
+	round(sum(surface_area)) AS 'celkova rozloha',
+	round(avg(surface_area)) AS 'průměrná rozloha'
+FROM countries 
+GROUP BY continent
+ORDER BY round( sum(surface_area)) DESC  ;
+	
+	
+select continent ,
+    sum(surface_area), round( avg(surface_area) )
+from countries c 
+group by continent
+order by sum(surface_area) desc
+;
+
+
+/*
+ * Úkol 2.3 Zjistěte celkovou populaci a počet států rozdělených podle hlavního náboženství
+ *  */
+select *
+from countries  ;
+
+SELECT 
+	continent ,
+	round( sum(population)) AS 'celková populace',
+	count(country) ,
+	religion 
+FROM countries 
+GROUP BY 	religion  
+ORDER BY round( sum(population)) DESC ;
+
+
+select religion, sum(population), count(*)
+from countries c 
+group by religion 
+order by sum(population) desc
+;
+
+/*
+ * Úkol 3: Pro každý kontinent zjistěte podíl počtu vnitrozemských států (sloupec landlocked),
+ *  podíl populace žijící ve vnitrozemských státech a podíl rozlohy vnitrozemských států.
+ */
+SELECT 
+	round(sum(landlocked)/count(*)) AS 'celkový podíl počtu vnitrozemských států'  ,
+	round(sum(population)*sum(landlocked)) / 
+FROM countries;
+
+
+/*
+ * Úkol 4: Zjistěte celkovou populaci ve státech rozdělených podle kontinentů a regionů (sloupec region_in_world).
+ *  Seřaďte je podle kontinentů abecedně a podle populace sestupně.
+ */
+
+
+
+
+
+
+
+
+
+
