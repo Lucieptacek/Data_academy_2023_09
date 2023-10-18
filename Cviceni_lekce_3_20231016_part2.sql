@@ -295,6 +295,38 @@ order by sum(population) desc
  *  podíl populace žijící ve vnitrozemských státech a podíl rozlohy vnitrozemských států.
  */
 SELECT 
+	continent ,
+	country ,
+	landlocked ,
+	population ,
+	surface_area 
+FROM countries ;
+
+DESC countries ;
+DESC czechia_payroll ;
+
+SELECT 
+	continent,
+	sum(landlocked)/count(*) AS 'podíl počtu vnitrozemských států',
+	sum(landlocked*population)/sum(population) AS 'podíl populace žijící ve vnitrozemských státech',
+	sum(landlocked*surface_area)/sum(surface_area) AS 'podíl rozlohy vnitrozemských států'
+FROM countries 	
+WHERE continent IS NOT NULL AND landlocked IS NOT NULL 
+GROUP BY continent ;
+
+
+select continent , 
+    round( sum( landlocked ) / count(*), 2) as landlocked_cnt_share,
+    round( sum( landlocked * surface_area ) / sum( surface_area ), 2 ) as landlocked_area_share,
+    round( sum( landlocked * population ) / sum( population ), 2 ) as landlocked_population_share
+from countries
+where continent is not null and landlocked is not null
+group by continent 
+;
+
+
+
+SELECT 
 	round(sum(landlocked)/count(*)) AS 'celkový podíl počtu vnitrozemských států'  ,
 	round(sum(population)*sum(landlocked)) / 
 FROM countries;
@@ -304,6 +336,118 @@ FROM countries;
  * Úkol 4: Zjistěte celkovou populaci ve státech rozdělených podle kontinentů a regionů (sloupec region_in_world).
  *  Seřaďte je podle kontinentů abecedně a podle populace sestupně.
  */
+
+SELECT 
+	round(sum(population), 2) AS 'celkova_suma_populace', 
+	country,
+	continent ,
+	region_in_world 
+FROM countries
+WHERE continent IS NOT NULL 
+GROUP BY continent , region_in_world 
+ORDER BY continent ASC,
+	sum(population) DESC ;
+
+select continent , region_in_world , sum(population)
+from countries
+where continent is not null
+group by continent , region_in_world 
+order by continent , sum(population) desc
+;
+
+
+/*Úkol 5: Zjistěte celkovou populaci a počet států rozdělených podle kontinentů a podle náboženství. 
+ * Kontinenty seřaďte abecedně a náboženství v rámci kontinentů sestupně podle populace.*/
+
+SELECT 
+	continent,
+	religion,
+	round(sum(population)),
+	count (country)
+FROM countries 
+where continent is not null and religion is not null
+GROUP BY continent, religion 
+ORDER BY continent ASC,
+	sum(population) DESC ;
+
+select continent , religion , sum(population), count(*)
+from countries c 
+where continent is not null and religion is not null
+group by continent , religion 
+order by continent , sum(population) desc
+;
+
+/*Úkol 6: Zjistěte průměrnou roční teplotu v regionech Afriky.*/
+
+SELECT *
+FROM countries ;
+
+SELECT 
+	round(avg(yearly_average_temperature), 2) AS 'průměrná roční teplota',
+	region_in_world ,
+	continent
+FROM countries 
+WHERE continent = 'Africa' AND region_in_world  IS NOT NULL 
+GROUP BY region_in_world ;
+
+select region_in_world , 
+    round( sum( surface_area * yearly_average_temperature ) / sum( surface_area ), 2 ) as average_regional_temperature
+from countries
+where continent = 'Africa'
+    and yearly_average_temperature is not null
+group by region_in_world 
+;
+
+/*COVID-19: funkce SUM()
+Úkol 1: Vytvořte v tabulce covid19_basic nový sloupec, 
+kde od confirmed odečtete polovinu recovered a přejmenujete ho 
+jako novy_sloupec. Seřaďte podle data sestupně.*/
+
+SELECT 
+	*,
+	round(confirmed - (recovered/2), 2) AS novy_sloupec
+FROM covid19_basic
+ORDER BY `date` DESC ;
+
+/*Úkol 2: Kolik lidí se celkem uzdravilo na celém světě k 30.8.2020?*/
+
+SELECT 
+	sum(recovered) 
+FROM covid19_basic
+WHERE date = '20200830';
+
+/*Úkol 3: Kolik lidí se celkem uzdravilo, a kolik se jich nakazilo na celém světě k 30.8.2020?*/
+
+SELECT *
+FROM covid19_basic ;
+
+SELECT 
+	sum(recovered),
+	sum(confirmed) 
+FROM covid19_basic
+WHERE `date` = '20200830';
+
+/*Úkol 4: Jaký je rozdíl mezi nakaženými a vyléčenými na celém světě k 30.8.2020?*/
+SELECT  
+	sum(confirmed) - sum(recovered) AS 'rozdil mezi nakaženými a vyléčenými'
+FROM covid19_basic
+WHERE `date` = '20200830';
+
+/*Úkol 5: Z tabulky covi19_basic_differences zjistěte, kolik lidí se celkem nakazilo v České republice k 30.8.2020.*/
+
+SELECT *
+FROM covid19_basic_differences  ;
+
+
+SELECT 
+	sum(confirmed) 
+FROM covid19_basic_differences 
+WHERE `date` = '20200830'AND
+	country = 'Czechia';
+
+/*Úkol 6: Kolik lidí se nakazilo v jednotlivých zemích během srpna 2020?*/
+
+
 
 
 
